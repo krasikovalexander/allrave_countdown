@@ -29,18 +29,59 @@
     <div class='name'>{{$event->name}}</div>
     <div class='address'>{{$event->address}}</div>
     <div id='countdown'>00:00:00</div>
+
+    <div>
+        <a class='fullscreen' id="fullscreen"></a>
+    </div>
+    
     <div class='note'>Don't close this page to keep your geo position up-to-date</div>
+
+    <script>
+        var noSleep = new NoSleep();
+
+        var toggleEl = document.querySelector("#fullscreen");
+        toggleEl.addEventListener('click', function() {
+
+            var isInFullScreen = (document.fullscreenElement && document.fullscreenElement !== null) ||
+                (document.webkitFullscreenElement && document.webkitFullscreenElement !== null) ||
+                (document.mozFullScreenElement && document.mozFullScreenElement !== null) ||
+                (document.msFullscreenElement && document.msFullscreenElement !== null);
+
+            var docElm = document.documentElement;
+            if (!isInFullScreen) {
+                if (docElm.requestFullscreen) {
+                    docElm.requestFullscreen();
+                } else if (docElm.mozRequestFullScreen) {
+                    docElm.mozRequestFullScreen();
+                } else if (docElm.webkitRequestFullScreen) {
+                    docElm.webkitRequestFullScreen();
+                } else if (docElm.msRequestFullscreen) {
+                    docElm.msRequestFullscreen();
+                }
+                $("#main").addClass("full");
+                noSleep.enable();
+
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                } else if (document.mozCancelFullScreen) {
+                    document.mozCancelFullScreen();
+                } else if (document.msExitFullscreen) {
+                    document.msExitFullscreen();
+                }
+                $("#main").removeClass("full");
+                noSleep.disable();
+            }
+
+        }, false);
+    </script>
+
 @endsection
 
 @section('scripts')
 <script>
-    var noSleep = new NoSleep();
-
-    var toggleEl = document.querySelector("#main");
-    toggleEl.addEventListener('click', function() {
-        noSleep.enable()
-    }, false);
-
     function str_pad_left(string,pad,length) {
         return (new Array(length+1).join(pad)+string).slice(-length);
     }
