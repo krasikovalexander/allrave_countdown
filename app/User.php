@@ -37,7 +37,7 @@ class User extends Authenticatable
     public function getEtaAttribute()
     {
         $eta = $this->pivot->arrived ? 0 : $this->pivot->eta;
-        if ($this->pivot->manual && !$this->pivot->arrived) {
+        if (!$this->pivot->arrived) {
             $eta = $this->pivot->eta - $this->pivot->updated_at->diffInMinutes(Carbon::now());
         }
         return $eta;
