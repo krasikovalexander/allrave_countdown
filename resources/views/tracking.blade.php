@@ -36,11 +36,10 @@
 <script>
     var noSleep = new NoSleep();
 
-    function enableNoSleep() {
-      noSleep.enable();
-      document.removeEventListener('touchstart', enableNoSleep, false);
-    }
-    document.addEventListener('touchstart', enableNoSleep, false);
+    var toggleEl = document.querySelector("#main");
+    toggleEl.addEventListener('click', function() {
+        noSleep.enable()
+    }, false);
 
     function str_pad_left(string,pad,length) {
         return (new Array(length+1).join(pad)+string).slice(-length);
