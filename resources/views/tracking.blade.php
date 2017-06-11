@@ -22,6 +22,10 @@
         padding-top: 10px;
         font-weight: bold;
     }
+    #fullscreen {float: none;}
+    .fullscreen-container {
+        text-align: center;
+    }
 </style>
 @endsection
 
@@ -30,10 +34,10 @@
     <div class='address'>{{$event->address}}</div>
     <div id='countdown'>00:00:00</div>
 
-    <div>
+    <div class='fullscreen-container'>
         <a class='fullscreen' id="fullscreen"></a>
     </div>
-    
+
     <div class='note'>Don't close this page to keep your geo position up-to-date</div>
 
     <script>
