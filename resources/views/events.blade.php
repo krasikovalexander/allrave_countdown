@@ -2,6 +2,7 @@
 
 @section('styles')
 <style>
+  
     .event {
         background-color: white;
         margin: 10px;
@@ -95,7 +96,6 @@
         font-weight: bold;
         font-size: 16px;
         padding: 8px 20px 8px 20px;
-        cursor: pointer;
     }
 
     .event-driver-name {
@@ -140,8 +140,11 @@
 
 @section('scripts')
 <script>
+    function view(event){
+        window.location = '/event/'+event; 
+    }
 
-    function startCountdown(event, mode, eta, lat, lng) {
+    function setAddress(event, mode, address, lat, lng) {
         var jc = $.alert({
             theme: 'dark',
             icon: '',
@@ -150,9 +153,9 @@
             buttons: {}
         });
 
-        $.post('/start', {event: event, mode: mode, eta: eta, lat: lat, lng: lng, _token:  window.Laravel.csrfToken}, function(response){
+        $.post('/address', {event: event, mode: mode, address: address, lat: lat, lng: lng, _token:  window.Laravel.csrfToken}, function(response){
             if (response.result) {
-                window.location = response.url;
+                window.location.reload();
             } else {
                 jc.close();
                 $.alert({type: 'red', theme: 'dark', backgroundDismiss: true, title:'Error', content:response.error, autoClose:"ok|10000"});
@@ -166,28 +169,25 @@
     function showManual(event, userChoice = false) {
         var jc = $.confirm({
             theme: 'dark',
-            title: 'Drive to event location',
+            title: 'Set event address',
             content: '' +
             '<form action="" class="formName">' +
             '<div class="form-group">' +
-            (userChoice ? 'Set ETA manualy:' : '<span style="color:#ef5350;font-weight:bold">Geolocation is not available. Set ETA manualy:</span>')+
-            '<br/><label for="h">Hours</label><input id="h" type="number" placeholder="Hours" class="hours form-control" name="hours" value="0"  min=0 max=24 step=1 required /><br/>' +
-            '<label for="m">Minutes</label><input id="m" type="number" placeholder="Minutes" class="minutes form-control" name="minutes" value="0" min=0 max=60 step=1 required />' +
+            (userChoice ? 'Set address manualy:' : '<span style="color:#ef5350;font-weight:bold">Geolocation is not available. Set address manualy:</span>')+
+            '<br/><input id="address" type="text" placeholder="Address" class="address form-control" name="address" required />' +
             '</div>' +
             '</form>',
             buttons: {
                 formSubmit: {
-                    text: 'START',
+                    text: 'SAVE',
                     btnClass: 'btn-green',
                     action: function () {
-                        var hours = this.$content.find('.hours').val();
-                        var minutes = this.$content.find('.minutes').val();
-                        var eta = parseInt(hours)*60+parseInt(minutes);
-                        if(!eta){
-                            $.alert({type: 'red', theme: 'dark', backgroundDismiss: true, title:'Error', content:'Provide a valid estimated time', autoClose:"ok|10000"});
+                        var address = this.$content.find('.address').val();
+                        if(!address){
+                            $.alert({type: 'red', theme: 'dark', backgroundDismiss: true, title:'Error', content:'Provide a valid address', autoClose:"ok|10000"});
                             return false;
                         }
-                        startCountdown(event, 'manual', eta, null, null);
+                        setAddress(event, 'manual', address);
                     }
                 },
                 cancel: function () {
@@ -207,15 +207,15 @@
     function showAuto(event, lat, lng) {
         var jc = $.confirm({
             theme: 'dark',
-            title: 'Drive to event location',
+            title: 'Set event address',
             content: '' +
-            'Are you sure you want to start ride? ETA will be calculated based on your coordinates. <br/>Click <b>Manual</b> to set ETA explicitly.',
+            'Are you sure you want to set event address? It will be detected by your current coordinates. <br/>Click <b>Manual</b> to set address explicitly.',
             buttons: {
                 formSubmit: {
-                    text: 'START',
+                    text: 'SAVE',
                     btnClass: 'btn-green',
                     action: function () {
-                        startCountdown(event, 'auto', null, lat, lng);
+                        setAddress(event, 'auto', null, lat, lng);
                     }
                 },
                 manual: {
@@ -233,77 +233,25 @@
         });
     }
 
-    function toggle(btn, event, hasAddress) {
-        if ($(btn).hasClass('start')) {
-            if(window.location.protocol == "https:" && navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(function(position){
-                    if (!hasAddress) {
-                        showManual(event); 
-                    } else {
-                        showAuto(event, position.coords.latitude, position.coords.longitude);
-                    }
-                }, function(error) {
-                    showManual(event);
-                });
-            } else {
-                showManual(event);
-            }
-        } else {
 
-            var jc = $.confirm({
-                theme: 'dark',
-                title: 'Stop ride',
-                content: '' +
-                'Are you sure you want to stop this ride?',
-                buttons: {
-                    ok: {
-                        text: 'STOP',
-                        btnClass: 'btn-red',
-                        action: function () {
-                            window.location = "/cancel/"+event;
-                        }
-                    },
-                    cancel: function () {
-                        //close
-                    },
-                }
+    function geocode(event) {
+        if(window.location.protocol == "https:" && navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position){
+                showAuto(event, position.coords.latitude, position.coords.longitude);
+            }, function(error) {
+                showManual(event);
             });
-            
+        } else {
+            showManual(event);
         }
     }
-
-    function arrived(event) {
-        var jc = $.confirm({
-            theme: 'dark',
-            title: 'Finish ride',
-            content: '' +
-            'Are you sure?',
-            buttons: {
-                ok: {
-                    text: 'Arrived',
-                    btnClass: 'btn-red',
-                    action: function () {
-                        window.location = "/arrived/"+event;
-                    }
-                },
-                cancel: function () {
-                    //close
-                },
-            }
-        });
-    }
-
-    function leave(event) {
-        window.location = "/cancel/"+event;
-    }
-
-</script>
+</script> 
 @endsection
 
 @section('content')
     @foreach($events as $event) 
         <div class="event">
-            <div class='event-name'>
+            <div class='event-name' onclick="view({{$event->id}})">
                 {{$event->name}}
                 <div class='event-time'>
                     <span class="date">{{$event->time->format("j M")}}</span>,
@@ -311,35 +259,16 @@
                 </div>
             </div>
             <div class='event-address'>
-                {{$event->address}}
+                <span  onclick="view({{$event->id}})">
+                    {{$event->address}}
+                </span>
+                @if(!$event->address && auth()->id())
+                    Address not specified <button type="button" onclick="geocode({{$event->id}})">Use current location</button>
+                @endif
             </div>
 
-            <div class='event-drivers'>
-                @if (!$event->me && !$event->arrived)
-                    <div class="event-driver start" onclick="toggle(this, {{$event->id}}, {{$event->address ? 'true' : 'false'}})">
-                        <div class="event-driver-photo"></div>
-                    </div>
-                @else 
-                    @if (!$event->arrived)
-                        <div class="event-driver stop" onclick="toggle(this, {{$event->id}})">
-                            <div class="event-driver-photo"></div>
-                        </div>
-                        <div class="event-driver arrived" onclick="arrived({{$event->id}})">
-                            Arrived
-                        </div>
-                        @if($event->mode == 'auto') 
-                            <div class="event-driver tracking" onclick="window.location='{{url("tracking", ['event' => $event->id])}}'">
-                                <div class="event-driver-photo"></div>
-                            </div>
-                        @endif
-                    @else
-                        <div class="event-driver arrived" onclick="leave({{$event->id}})">
-                            Leave
-                        </div>
-                    @endif
-                @endif
+            <div class='event-drivers' onclick="view({{$event->id}})">
                 @foreach($event->drivers as $driver)
-                    @if ($driver->id !== auth()->id())
                     <div class="event-driver">
                         <div class="event-driver-photo" @if ($driver->photo) style="background-image:url({{url($driver->photo)}})" @endif></div>
                         <div class="event-driver-name">
@@ -356,7 +285,6 @@
                         </div>
                         @endif
                     </div>
-                    @endif
                 @endforeach
             </div>
             <div class="clear"></div>

@@ -48,6 +48,12 @@
                 top: 18px;
             }
 
+            .top-left {
+                position: absolute;
+                left: 18px;
+                top: 18px;
+            }
+
             .content {
                 //text-align: center;
             }
@@ -64,7 +70,6 @@
                 letter-spacing: .1rem;
                 text-decoration: none!important;
                 text-transform: uppercase;
-                text-shadow: 1px 1px #e5e5e5;
             }
 
             .m-b-md {
@@ -87,6 +92,10 @@
             }
             .fullscreen:hover, .fullscreen:active {
                 opacity:1;
+            }
+
+            .full .hide-fullscreen {
+                display: none;
             }
         </style>
 
@@ -112,27 +121,54 @@
         ]) !!};
     </script>
 
+    <script>
+        function fullscreen() {
+            var isInFullScreen = (document.fullscreenElement && document.fullscreenElement !== null) ||
+                (document.webkitFullscreenElement && document.webkitFullscreenElement !== null) ||
+                (document.mozFullScreenElement && document.mozFullScreenElement !== null) ||
+                (document.msFullscreenElement && document.msFullscreenElement !== null);
+
+            var docElm = document.documentElement;
+            if (!isInFullScreen) {
+                if (docElm.requestFullscreen) {
+                    docElm.requestFullscreen();
+                } else if (docElm.mozRequestFullScreen) {
+                    docElm.mozRequestFullScreen();
+                } else if (docElm.webkitRequestFullScreen) {
+                    docElm.webkitRequestFullScreen();
+                } else if (docElm.msRequestFullscreen) {
+                    docElm.msRequestFullscreen();
+                }
+                $("#main").addClass("full");
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                } else if (document.mozCancelFullScreen) {
+                    document.mozCancelFullScreen();
+                } else if (document.msExitFullscreen) {
+                    document.msExitFullscreen();
+                }
+                $("#main").removeClass("full");
+            }
+
+        }
+    </script>
+
     @yield('styles')
     @yield('scripts')
 </head>
 <body>
     <div id='main' class="flex-center position-ref full-height full-width">
 
-        @if (Route::has('login'))
-            <div class="top-right links">
-                <a href="/">Kiosk mode</a>
-                @if (Auth::check())
-                    <a href="{{ url('/home') }}">Events</a>
-                    @if (Auth::user()->isAdmin())
-                        <a href="{{ url('/admin') }}">Admin</a>
-                    @endif
-                    <a href="{{ url('/logout') }}">Logout</a>
-                    <!--<a class='fullscreen' onclick="fullscreen()"></a>-->
-                @else
-                    <a href="{{ url('/login') }}">Login</a>
-                @endif
-            </div>
-        @endif
+        <div class="top-left links">
+            <a class='hide-fullscreen' href="/">&lsaquo; Back</a>
+        </div>
+
+        <div class="top-right links">
+            <a class='fullscreen' onclick="fullscreen()"></a>
+        </div>
 
         <div class="content">
             <div id="app">

@@ -41,6 +41,11 @@ AdminSection::registerModel(\App\Event::class, function (ModelConfiguration $mod
 
     $model->updating(function (ModelConfiguration $model, \App\Event $event) {
         $event->geocode();
+        //return $event->lat !== null;
+    });
+    $model->creating(function (ModelConfiguration $model, \App\Event $event) {
+        $event->geocode();
+        //return $event->lat !== null;
     });
 
     $model->onDisplay(function () {
@@ -60,11 +65,24 @@ AdminSection::registerModel(\App\Event::class, function (ModelConfiguration $mod
     $model->onCreateAndEdit(function () {
         $form = AdminForm::panel()->addBody([
             AdminFormElement::text('name', 'Name')->required(),
-            AdminFormElement::text('address', 'Address')->required(),
-            AdminFormElement::view('admin.event.map'),
             AdminFormElement::datetime('time', 'Time')->required(),
+            AdminFormElement::textarea('congratulations', 'Congratulations')->required(),
             AdminFormElement::textarea('note', 'Note'),
+            AdminFormElement::text('address', 'Address'),
+            AdminFormElement::view('admin.event.map'),
+
+            AdminFormElement::text('main_bg_color', 'Main background color'),
+            AdminFormElement::image('main_bg_image', 'Main background image'),
+            AdminFormElement::text('area_bg_color', 'Text area background color'),
+            AdminFormElement::image('area_bg_image', 'Text area background image'),
+            AdminFormElement::text('area_text_color', 'Text color'),
+            AdminFormElement::text('area_timer_color', 'Countdown color'),
+            AdminFormElement::text('area_arrived_color', '"Arrived" color'),
         ]);
+        $form->addScript('jquery-js', asset('js/jquery.min.js'));
+        $form->addScript('colorpicker-js', asset('js/jquery.minicolors.min.js'));
+        $form->addStyle('colorpicker-css', asset('js/jquery.minicolors.css'));
+        $form->addScript('setpicker-js', asset('js/setpicker.js'));
         return $form;
     });
 

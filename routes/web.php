@@ -11,11 +11,16 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
 Auth::routes();
 
+Route::get('/', 'HomeController@publicList')->name('public');
 Route::get('/home', 'HomeController@index')->name('home');
+Route::post('/start', 'HomeController@start')->name('start');
+Route::get('/arrived/{event}', 'HomeController@arrived')->name('arrived');
+Route::get('/cancel/{event}', 'HomeController@cancel')->name('cancel');
+Route::get('/tracking/{event}', 'HomeController@tracking')->name('tracking');
+Route::post('/update', 'HomeController@update')->name('update');
 Route::get('logout', 'Auth\LoginController@logout')->name('logoutlink');
+Route::get('/event/{event}', 'HomeController@viewEvent')->name('event');
+Route::post('/arrivings', 'HomeController@arrivings')->name('arrivings');
+Route::post('/address', 'HomeController@address')->name('address');

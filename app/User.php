@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Carbon\Carbon;
 
 class User extends Authenticatable
 {
@@ -17,6 +18,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name', 'email', 'password',
     ];
+    protected $appends = ['eta'];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -30,5 +32,14 @@ class User extends Authenticatable
     public function isAdmin()
     {
         return $this->admin;
+    }
+
+    public function getEtaAttribute()
+    {
+        $eta = $this->pivot->arrived ? 0 : $this->pivot->eta;
+        if ($this->pivot->manual && !$this->pivot->arrived) {
+            $eta = $this->pivot->eta - $this->pivot->updated_at->diffInMinutes(Carbon::now());
+        }
+        return $eta;
     }
 }

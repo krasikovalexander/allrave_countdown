@@ -15,7 +15,6 @@ class CreateTableEventDriver extends Migration
     {
         Schema::create('event_user', function (Blueprint $table) {
             $table->increments('id');
-            $table->timestamps();
             $table->integer('user_id')->unsigned();
             $table->integer('event_id')->unsigned();
 
