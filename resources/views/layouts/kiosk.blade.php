@@ -121,8 +121,33 @@
         ]) !!};
     </script>
 
+    @yield('styles')
+    @yield('scripts')
+</head>
+<body>
+    <div id='main' class="flex-center position-ref full-height full-width">
+
+        <div class="top-left links">
+            <a class='hide-fullscreen' href="/">&lsaquo; Back</a>
+        </div>
+
+        <div class="top-right links">
+            <a class='fullscreen' id="fullscreen"></a>
+        </div>
+
+        <div class="content">
+            <div id="app">
+                @yield('content')
+            </div>
+        </div>
+    </div>
+
     <script>
-        function fullscreen() {
+        var noSleep = new NoSleep();
+
+        var toggleEl = document.querySelector("#fullscreen");
+        toggleEl.addEventListener('click', function() {
+
             var isInFullScreen = (document.fullscreenElement && document.fullscreenElement !== null) ||
                 (document.webkitFullscreenElement && document.webkitFullscreenElement !== null) ||
                 (document.mozFullScreenElement && document.mozFullScreenElement !== null) ||
@@ -140,6 +165,8 @@
                     docElm.msRequestFullscreen();
                 }
                 $("#main").addClass("full");
+                noSleep.enable();
+
             } else {
                 if (document.exitFullscreen) {
                     document.exitFullscreen();
@@ -151,32 +178,10 @@
                     document.msExitFullscreen();
                 }
                 $("#main").removeClass("full");
+                noSleep.disable();
             }
 
-        }
+        }, false);
     </script>
-
-    @yield('styles')
-    @yield('scripts')
-</head>
-<body>
-    <div id='main' class="flex-center position-ref full-height full-width">
-
-        <div class="top-left links">
-            <a class='hide-fullscreen' href="/">&lsaquo; Back</a>
-        </div>
-
-        <div class="top-right links">
-            <a class='fullscreen' onclick="fullscreen()"></a>
-        </div>
-
-        <div class="content">
-            <div id="app">
-                @yield('content')
-            </div>
-        </div>
-    </div>
-
-
 </body>
 </html>
