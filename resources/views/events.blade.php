@@ -166,7 +166,7 @@
         });
     }
 
-    function showManual(event, userChoice = false) {
+    function showManual(event, userChoice) {
         var jc = $.confirm({
             theme: 'dark',
             title: 'Set event address',
