@@ -12,13 +12,17 @@
         font-size: 1em;
         font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif;
         box-shadow: 0 3px 10px rgba(0, 0, 0, 0.23), 0 3px 10px rgba(0, 0, 0, 0.16);
+        cursor: pointer;
+    }
+    .event:hover {
+        background-color: rgb(245,245,245);
     }
     .event-name {
         font-weight: bold;
         font-size: 1.5em;
-        border-bottom: 1px solid #777;
+        //border-bottom: 1px solid #777;
         margin-bottom: 5px;
-            text-shadow: 1px 1px #e5e5e5;
+        text-shadow: 1px 1px #e5e5e5;
     }
 
     .event-time {
@@ -32,7 +36,7 @@
         color: #ff3d00;
     }
     .event-drivers {
-        margin-top:15px;
+        //margin-top:15px;
     }
     .event-driver {
         float: left;
