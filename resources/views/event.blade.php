@@ -7,6 +7,8 @@
             @if($event->main_bg_image)
             background-image:url({{url($event->main_bg_image)}});
             background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center center;
             @endif
         }
         .event-card .text {
@@ -18,7 +20,9 @@
             background-color: {{$event->area_bg_color ? $event->area_bg_color : 'white'}};
             @if($event->area_bg_image)
             background-image:url({{url($event->area_bg_image)}});
-            background-size: cover;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center center;
             @endif
             width: 80vw;
             padding: 20px;
