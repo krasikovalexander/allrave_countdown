@@ -259,9 +259,9 @@
                 </div>
             </div>
             <div class='event-address'>
-                <span  onclick="view({{$event->id}})">
+                <!--<span  onclick="view({{$event->id}})">
                     {{$event->address}}
-                </span>
+                </span>-->
                 @if(!$event->address && auth()->id())
                     Address not specified <button type="button" onclick="geocode({{$event->id}})">Use current location</button>
                 @endif
