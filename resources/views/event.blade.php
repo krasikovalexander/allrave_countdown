@@ -115,7 +115,7 @@
 @section('content')
     <div class='event-card'>
         <div class="text without-eta">
-            {{$event->congratulations}}
+            {!!$event->congratulations!!}
         </div>
         <div class="text arrived">
             Your shuttle is arrived!

@@ -145,7 +145,9 @@ return [
     | Select default settings for datatable
     |
     */
-    'datatables' => [],
+    'datatables' => [
+        'responsive' => true
+    ],
 
     /*
     |--------------------------------------------------------------------------

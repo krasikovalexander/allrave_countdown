@@ -58,7 +58,7 @@ AdminSection::registerModel(\App\Event::class, function (ModelConfiguration $mod
             AdminColumn::text('note', 'Note')
         ]);
         $display->paginate(20);
-
+        $display->addScript('datatables.responsive', asset('js/dataTables.responsive.min.js'), ['admin-default']);
         return $display;
     });
 
@@ -66,7 +66,7 @@ AdminSection::registerModel(\App\Event::class, function (ModelConfiguration $mod
         $form = AdminForm::panel()->addBody([
             AdminFormElement::text('name', 'Name')->required(),
             AdminFormElement::datetime('time', 'Time')->required(),
-            AdminFormElement::textarea('congratulations', 'Congratulations')->required(),
+            AdminFormElement::wysiwyg('congratulations', 'Congratulations', 'ckeditor')->required(),
             AdminFormElement::textarea('note', 'Note'),
             AdminFormElement::text('address', 'Address'),
             AdminFormElement::view('admin.event.map'),
