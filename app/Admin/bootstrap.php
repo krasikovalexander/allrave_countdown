@@ -4,7 +4,6 @@
 //    ->css('extend', resources_url('css/extend.css'));
 
 use SleepingOwl\Admin\Model\ModelConfiguration;
-use Hash;
 
 AdminSection::registerModel(\App\User::class, function (ModelConfiguration $model) {
     $model->setTitle('Users');
