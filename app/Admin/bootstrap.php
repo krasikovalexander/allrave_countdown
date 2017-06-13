@@ -4,6 +4,7 @@
 //    ->css('extend', resources_url('css/extend.css'));
 
 use SleepingOwl\Admin\Model\ModelConfiguration;
+use Hash;
 
 AdminSection::registerModel(\App\User::class, function (ModelConfiguration $model) {
     $model->setTitle('Users');
@@ -25,12 +26,26 @@ AdminSection::registerModel(\App\User::class, function (ModelConfiguration $mode
         $form = AdminForm::panel()->addBody([
             AdminFormElement::text('name', 'Name')->required(),
             AdminFormElement::image('photo', 'Photo'),
-            AdminFormElement::text('email', 'email')->unique(),
-            AdminFormElement::password('password', 'password')->hashWithBcrypt(),
+            AdminFormElement::text('email', 'Email')->unique(),
+            AdminFormElement::text('new_password', 'Password'),
             AdminFormElement::checkbox('admin', 'Admin'),
         ]);
         return $form;
     });
+
+    $model->updating(function (ModelConfiguration $model, \App\User $user) {
+        if ($user->new_password) {
+            $user->password = Hash::make($user->new_password);
+        }
+        unset($user->new_password);
+    });
+    $model->creating(function (ModelConfiguration $model, \App\USer $user) {
+        if ($user->new_password) {
+            $user->password = Hash::make($user->new_password);
+        }
+        unset($user->new_password);
+    });
+
 
     $model->setIcon('fa fa-user');
     $model->addToNavigation();
