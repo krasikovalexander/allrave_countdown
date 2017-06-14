@@ -122,7 +122,7 @@
             {!!$event->congratulations!!}
         </div>
         <div class="text arrived">
-            Your shuttle is arrived!
+            Your shuttle has arrived!
         </div>
         <div class="text with-eta">
             Your next shuttle to <br/>
