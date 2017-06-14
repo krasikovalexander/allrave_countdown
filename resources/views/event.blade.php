@@ -32,7 +32,7 @@
         }
 
         #countdown {
-            font-size: 80px;
+            font-size: 160px;
             font-weight: bold;
             color: {{$event->area_timer_color ? $event->area_timer_color : '#ff3d00'}};
             text-align: center;
@@ -41,7 +41,7 @@
         .arrived {
             color: {{$event->area_arrived_color ? $event->area_arrived_color : '#ff3d00'}};
             font-weight: bold;
-            font-size: 50px;
+            font-size: 100px;
             margin-bottom: 20px;
         }
 
@@ -50,10 +50,10 @@
                 font-size: 20px;
             }
             .arrived {
-                font-size: 25px;
+                font-size: 50px;
             }
             #countdown {
-                font-size: 40px;
+                font-size: 100px;
             }
         }
     </style>
