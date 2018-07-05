@@ -56,6 +56,28 @@
                 font-size: 100px;
             }
         }
+
+        .eta-container {
+            display: inline-block;
+        }
+        .eta {
+            line-height: 1.1;
+        }
+        .labels .label {
+            display: block;
+            color: {{$event->area_timer_color ? $event->area_timer_color : '#ff3d00'}};
+            text-align: center;
+            font-family: sans-serif;
+            font-size: 14px;
+            width: 50%;
+            padding-bottom: 20px;
+        }
+        .left {
+            float: left;
+        }
+        .right {
+            float: right;
+        }
     </style>
 @endsection
 
@@ -125,10 +147,17 @@
             Your shuttle has arrived!
         </div>
         <div class="text with-eta">
-            Your next shuttle to <br/>
+            <!--Your next shuttle to <br/>
             <b>{{$event->name}}</b><br/>
-            will arrive in
+            will arrive in-->
+            Rave Luxury Transportation is on the way and will arrive in
             <br/>
-            <div class="eta" id="countdown"></div>
+            <div class="eta-container">
+                <div class="eta" id="countdown"></div>
+                <div class="labels">
+                    <div class="label left">hours</div>
+                    <div class="label right">minutes</div>
+                </div>
+            </div>
         </div>
 @endsection

@@ -258,8 +258,8 @@
             <div class='event-name' onclick="view({{$event->id}})">
                 {{$event->name}}
                 <div class='event-time'>
-                    <span class="date">{{$event->time->format("j M")}}</span>,
-                    <span class="time">{{$event->time->format("H:i")}}</span>
+                    <span class="date">{{$event->time->format("j M")}}</span><!--,
+                    <span class="time">{{$event->time->format("H:i")}}</span>-->
                 </div>
             </div>
             <div class='event-address'>
